@@ -1,10 +1,18 @@
 package cn.mymories.monika.service;
 
 
+import cn.mymories.monika.mbg.model.Project;
+
 public interface ProjectService {
     /**
      * 创建项目
-     * @param projectParam
+     * @param project
      */
-//    void createProject(ProjectParam projectParam) throws Exception;
+    void createProject(Project project) throws Exception;
+
+    /**
+     * 删除项目
+     * @param projectId
+     */
+    void deleteProjectById(String projectId);
 }

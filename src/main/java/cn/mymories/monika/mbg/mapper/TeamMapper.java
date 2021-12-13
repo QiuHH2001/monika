@@ -32,4 +32,8 @@ public interface TeamMapper {
     List<Team> listJoinedTeamAndCreator(String userId);
 
     void updateTeamDetailByTeamId(String id, String name, String description);
+
+    void updateDeleteTimeById(String teamId);
+
+    Team selectById(String teamId);
 }

@@ -169,10 +169,11 @@
       from team, project
       WHERE project.delete_time is NULL and team.id = project.pk_team_id and team.id = #{teamId}
     </select>
-    <select id="selectByTeamId" resultType="cn.mymories.monika.mbg.model.Project">
+    <select id="selectProjectIdByTeamId" resultType="cn.mymories.monika.mbg.model.Project">
       SELECT project.id
       from project
       WHERE pk_team_id = #{teamId}
+        and delete_time is null
     </select>
     <update id="updateByExampleSelective" parameterType="map">
     update project

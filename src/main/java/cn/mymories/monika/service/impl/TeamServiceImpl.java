@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     private ProjectMapper projectMapper;
 
-    @Autowired
+    @Resource
     private UserTeamMapper userTeamMapper;
 
     /**
@@ -107,7 +108,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team listTeamDetail(String teamId) {
-        Team team = teamMapper.selectByPrimaryKey(teamId);
+        Team team = teamMapper.selectById(teamId);
         List<User> memberVoList = userMapper.listMemberByTeamId(teamId);
         team.setMemberList(memberVoList);
         return team;
@@ -123,14 +124,12 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void deleteTeam(String teamId) {
 //        1、查找此团队的项目，若存在，则设置project表的删除时间
-        List<Project> projectList = projectMapper.selectByTeamId(teamId);
+        List<Project> projectList = projectMapper.selectProjectIdByTeamId(teamId);
         if (!projectList.isEmpty()){
 //            不为空，设置project表的删除时间
             for (Project project : projectList) {
-                Project projectVo = new Project();
-                projectVo.setId(project.getId());
-                projectVo.setDeleteTime(new Date(System.currentTimeMillis()));
-                projectMapper.updateByPrimaryKeySelective(projectVo);
+                project.setDeleteTime(new Date(System.currentTimeMillis()));
+                projectMapper.updateByPrimaryKeySelective(project);
             }
         }
 
@@ -141,17 +140,12 @@ public class TeamServiceImpl implements TeamService {
         }
         System.out.println("hhh");
         if (!userTeamList.isEmpty()){
-//            不为空，设置project表的删除时间
-            UserTeam userTeam = new UserTeam();
-            userTeam.setDeleteTime(new Date(System.currentTimeMillis()));
+//            不为空，设置user_team表的删除时间
             userTeamMapper.updateDeleteTimeByTeamId(teamId);
         }
 
 //        3、设置team表的删除时间
-        Team team = new Team();
-        team.setId(teamId);
-        team.setDeleteTime(new Date(System.currentTimeMillis()));
-        teamMapper.updateByPrimaryKeySelective(team);
+        teamMapper.updateDeleteTimeById(teamId);
     }
 
 

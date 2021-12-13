@@ -152,6 +152,7 @@
       SELECT *
       from user_team
       WHERE pk_team_id = #{teamId}
+        and delete_time is null
     </select>
     <update id="updateByExampleSelective" parameterType="map">
     update user_team
@@ -214,8 +215,9 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateDeleteTimeByTeamId">
-    UPDATE team
-    SET delete_time = NULL
-    WHERE id = #{teamId}
+    UPDATE user_team
+    SET delete_time = NOW()
+    WHERE pk_team_id = #{teamId}
+      AND delete_time is NULL
   </update>
 </mapper>

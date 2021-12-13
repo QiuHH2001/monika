@@ -31,5 +31,5 @@ public interface ProjectMapper {
 
     List<Project> listProjectByTeamId(String teamId);
 
-    List<Project> selectByTeamId(String teamId);
+    List<Project> selectProjectIdByTeamId(String teamId);
 }

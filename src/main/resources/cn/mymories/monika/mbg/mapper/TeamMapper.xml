@@ -162,7 +162,12 @@
       from team, `user`
       WHERE team.delete_time is NULL and team.creator_id = `user`.id and `user`.id = #{userId}
     </select>
-    <update id="updateByExampleSelective" parameterType="map">
+  <select id="selectById" resultType="cn.mymories.monika.mbg.model.Team">
+    select * from team
+    where id = #{teamId}
+    and delete_time is null
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
     update team
     <set>
       <if test="record.id != null">
@@ -235,5 +240,11 @@
     set name = #{name},
         description = #{description}
     where id = #{id}
+  </update>
+  <update id="updateDeleteTimeById">
+    UPDATE team
+    SET delete_time = NOW()
+    WHERE id = #{teamId}
+      AND delete_time is null
   </update>
 </mapper>
